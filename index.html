@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #e3f2fd; /* Light blue background */
+            color: #333;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffb300; /* Gold color */
+        }
+        select, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        select {
+            background-color: #fafafa;
+        }
+        button {
+            background-color: #ffb300; /* Gold color */
+            color: white;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        button:hover {
+            background-color: #f57c00; /* Darker gold */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        button:active {
+            background-color: #e65100; /* Even darker gold on click */
+        }
+        #warning {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+        #proceed-button {
+            display: none;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Disclaimer</h2>
+    
+    <div class="form-group">
+        <label for="location">Choose a location:</label>
+        <select id="location" onchange="showRequestOptions()">
+            <option value="">--Select Location--</option>
+            <option value="Rac">Rac</option>
+            <option value="Mac">Mac</option>
+        </select>
+    </div>
+
+    <div id="request-container" class="form-group" style="display: none;">
+        <label for="request">What are you requesting for?</label>
+        <select id="request" onchange="handleRequest()">
+            <option value="">--Select Request--</option>
+            <option value="Paper Towels">Paper Towels</option>
+            <option value="Fitness Equipment">Fitness Equipment</option>
+            <option value="Hand Sanitizer/Soap">Hand Sanitizer/Soap</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+
+    <div id="warning"></div>
+
+    <div id="proceed-button" class="form-group">
+        <button onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSdLv_YL3q_UJ4QoKYjh2tdDBfQhETR3MZ61BseLUtRTzIvAAw/viewform', '_blank')">Proceed</button>
+    </div>
+</div>
+
+<script>
+    // Function to display the request options after selecting a location
+    function showRequestOptions() {
+        const location = document.getElementById("location").value;
+        const requestContainer = document.getElementById("request-container");
+
+        // Only show the request options if a location is selected
+        if (location) {
+            requestContainer.style.display = "block";
+        } else {
+            requestContainer.style.display = "none";
+        }
+
+        // Hide warning and proceed button when location is changed
+        document.getElementById("warning").style.display = "none";
+        document.getElementById("proceed-button").style.display = "none";
+    }
+
+    // Function to handle the request selection and show warnings/proceed button
+    function handleRequest() {
+        const location = document.getElementById("location").value;
+        const request = document.getElementById("request").value;
+        const warning = document.getElementById("warning");
+        const proceedButton = document.getElementById("proceed-button");
+
+        // Reset warning and proceed button visibility
+        warning.style.display = "none";
+        proceedButton.style.display = "none";
+
+        // Handle logic based on location and request type
+        if (location === "Rac") {
+            if (request === "Paper Towels" || request === "Fitness Equipment") {
+                warning.textContent = "Do not send service request for this. It is handled internally by RFE or Equipment Maintenance Team. Refer to the Group Chat for clarification.";
+                warning.style.display = "block";
+            } else if (request === "Hand Sanitizer/Soap") {
+                warning.textContent = "If it is not completely empty, do not send service request for this.";
+                warning.style.display = "block";
+                proceedButton.style.display = "block"; // Show Proceed button for this option
+            } else if (request === "Other") {
+                proceedButton.style.display = "block"; // Show Proceed button for 'Other'
+            }
+        } else if (location === "Mac") {
+            if (request === "Paper Towels" || request === "Hand Sanitizer/Soap") {
+                warning.textContent = "Make sure they are completely empty. Call OVG on the radio or telephone to request refill.";
+                warning.style.display = "block";
+            } else if (request === "Fitness Equipment") {
+                warning.textContent = "Do not send service request for this. It is handled internally by RFE or Equipment Maintenance Team. Refer to the Group Chat for clarification.";
+                warning.style.display = "block";
+            } else if (request === "Other") {
+                proceedButton.style.display = "block"; // Show Proceed button for 'Other'
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
