@@ -81,7 +81,7 @@
     
     <div class="form-group">
         <label for="location">Choose a location:</label>
-        <select id="location" onchange="showRequestOptions()">
+        <select id="location" onchange="showRequestOptions(); refreshContent();">
             <option value="">--Select Location--</option>
             <option value="Rac">Rac</option>
             <option value="Mac">Mac</option>
@@ -90,7 +90,7 @@
 
     <div id="request-container" class="form-group" style="display: none;">
         <label for="request">What are you requesting for?</label>
-        <select id="request" onchange="handleRequest()">
+        <select id="request" onchange="handleRequest(); refreshContent();">
             <option value="">--Select Request--</option>
             <option value="Paper Towels">Paper Towels</option>
             <option value="Fitness Equipment">Fitness Equipment</option>
@@ -171,6 +171,20 @@
                 proceedButton.classList.add("fade-in");
             }
         }
+    }
+
+    // Function to refresh the content in the background
+    function refreshContent() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', window.location.href, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(xhr.responseText, 'text/html');
+                document.body.innerHTML = doc.body.innerHTML;
+            }
+        };
+        xhr.send();
     }
 </script>
 
