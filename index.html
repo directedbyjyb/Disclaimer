@@ -65,6 +65,13 @@
         .form-group {
             margin-bottom: 20px;
         }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -104,12 +111,18 @@
     function showRequestOptions() {
         const location = document.getElementById("location").value;
         const requestContainer = document.getElementById("request-container");
+        const requestSelect = document.getElementById("request");
+
+        // Reset the request selection
+        requestSelect.value = "";
 
         // Only show the request options if a location is selected
         if (location) {
             requestContainer.style.display = "block";
+            requestContainer.classList.add("fade-in");
         } else {
             requestContainer.style.display = "none";
+            requestContainer.classList.remove("fade-in");
         }
 
         // Hide warning and proceed button when location is changed
@@ -133,42 +146,32 @@
             if (request === "Paper Towels" || request === "Fitness Equipment") {
                 warning.textContent = "Do not send service request for this. It is handled internally by RFE or Equipment Maintenance Team. Refer to the Group Chat for clarification.";
                 warning.style.display = "block";
+                warning.classList.add("fade-in");
             } else if (request === "Hand Sanitizer/Soap") {
                 warning.textContent = "If it is not completely empty, do not send service request for this.";
                 warning.style.display = "block";
+                warning.classList.add("fade-in");
                 proceedButton.style.display = "block"; // Show Proceed button for this option
+                proceedButton.classList.add("fade-in");
             } else if (request === "Other") {
                 proceedButton.style.display = "block"; // Show Proceed button for 'Other'
+                proceedButton.classList.add("fade-in");
             }
         } else if (location === "Mac") {
             if (request === "Paper Towels" || request === "Hand Sanitizer/Soap") {
                 warning.textContent = "Make sure they are completely empty. Call OVG on the radio or telephone to request refill.";
                 warning.style.display = "block";
+                warning.classList.add("fade-in");
             } else if (request === "Fitness Equipment") {
                 warning.textContent = "Do not send service request for this. It is handled internally by RFE or Equipment Maintenance Team. Refer to the Group Chat for clarification.";
                 warning.style.display = "block";
+                warning.classList.add("fade-in");
             } else if (request === "Other") {
                 proceedButton.style.display = "block"; // Show Proceed button for 'Other'
+                proceedButton.classList.add("fade-in");
             }
         }
     }
-
-    // Function to refresh the content in the background
-    function refreshContent() {
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', window.location.href, true);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(xhr.responseText, 'text/html');
-                document.body.innerHTML = doc.body.innerHTML;
-            }
-        };
-        xhr.send();
-    }
-
-    // Set interval to refresh content every 5 minutes (300000 milliseconds)
-    setInterval(refreshContent, 300000);
 </script>
 
 </body>
