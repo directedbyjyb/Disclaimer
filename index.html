@@ -152,6 +152,23 @@
             }
         }
     }
+
+    // Function to refresh the content in the background
+    function refreshContent() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', window.location.href, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(xhr.responseText, 'text/html');
+                document.body.innerHTML = doc.body.innerHTML;
+            }
+        };
+        xhr.send();
+    }
+
+    // Set interval to refresh content every 5 minutes (300000 milliseconds)
+    setInterval(refreshContent, 300000);
 </script>
 
 </body>
